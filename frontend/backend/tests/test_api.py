@@ -1,8 +1,13 @@
+import sys
+from pathlib import Path
+
 import firebase_admin
 import pytest
 from fastapi.testclient import TestClient
 
-from main import app, verify_bearer_token
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+
+from main import app, verify_bearer_token  # noqa: E402
 
 
 @pytest.fixture(name="client")
