@@ -1,0 +1,74 @@
+.topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem clamp(1.5rem, 5vw, 3rem);
+  background: rgba(17, 19, 27, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(234, 236, 239, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #f3f4f6;
+  letter-spacing: 0.05em;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: rgba(234, 236, 239, 0.75);
+}
+
+.actions a {
+  color: rgba(234, 236, 239, 0.85);
+}
+
+.user {
+  color: rgba(234, 236, 239, 0.75);
+  max-width: 200px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.logoutButton {
+  border: 1px solid rgba(234, 236, 239, 0.12);
+  background: #1b1d27;
+  color: rgba(234, 236, 239, 0.85);
+  border-radius: 999px;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.logoutButton:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.logoutButton:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
