@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { getFirebaseAuth } from "@/lib/firebase";
 import { useAuth } from "@/context/AuthContext";
 import styles from "../login/login.module.css";
 
@@ -31,7 +31,11 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
+      const firebaseAuth = getFirebaseAuth();
+      if (!firebaseAuth) {
+        throw new Error("Authentication is not configured.");
+      }
+      const cred = await createUserWithEmailAndPassword(firebaseAuth, email.trim(), password);
       if (name.trim()) {
         await updateProfile(cred.user, { displayName: name.trim() });
       }

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged, signOut as firebaseSignOut, User } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { getFirebaseAuth } from "@/lib/firebase";
 
 type UserInfo = {
   name?: string | null;
@@ -37,14 +37,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     setUser(null);
     try {
-      await firebaseSignOut(auth);
+      const firebaseAuth = getFirebaseAuth();
+      if (firebaseAuth) {
+        await firebaseSignOut(firebaseAuth);
+      }
     } catch {
       // ignore sign out errors
     }
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: User | null) => {
+    const firebaseAuth = getFirebaseAuth();
+    if (!firebaseAuth) {
+      setTimeout(() => setInitializing(false), 0);
+      return;
+    }
+
+    const unsubscribe = onAuthStateChanged(firebaseAuth, async (firebaseUser: User | null) => {
       if (firebaseUser) {
         try {
           const idToken = await firebaseUser.getIdToken();

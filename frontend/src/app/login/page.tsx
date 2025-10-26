@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { auth } from "@/lib/firebase";
+import { getFirebaseAuth } from "@/lib/firebase";
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,11 @@ export default function LoginPage() {
     setErr(null);
     setLoading(true);
     try {
-      const cred = await signInWithEmailAndPassword(auth, email.trim(), pw);
+      const firebaseAuth = getFirebaseAuth();
+      if (!firebaseAuth) {
+        throw new Error("Authentication is not configured.");
+      }
+      const cred = await signInWithEmailAndPassword(firebaseAuth, email.trim(), pw);
       const idToken = await cred.user.getIdToken();
       setToken(idToken);
       setUser({ name: cred.user.displayName || null, email: cred.user.email || null });
@@ -48,7 +52,11 @@ export default function LoginPage() {
     setSocialLoading(true);
     try {
       const provider = new GoogleAuthProvider();
-      const cred = await signInWithPopup(auth, provider);
+      const firebaseAuth = getFirebaseAuth();
+      if (!firebaseAuth) {
+        throw new Error("Authentication is not configured.");
+      }
+      const cred = await signInWithPopup(firebaseAuth, provider);
       const idToken = await cred.user.getIdToken();
       setToken(idToken);
       setUser({ name: cred.user.displayName || null, email: cred.user.email || null });
